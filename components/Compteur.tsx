@@ -19,8 +19,12 @@ export function Compteur({ valeur, duree = 1300 }: { valeur: string; duree?: num
     const el = ref.current;
     if (!el) return;
 
-    // « 15 000 » -> prefixe "", nombre 15000, suffixe "" ; « 10 M€ » -> suffixe " M€"
-    const m = valeur.match(/^([^\d]*)([\d   ]+)(.*)$/);
+    /* « 15 000 » donne préfixe "", nombre 15000, suffixe "" ; « 10 j » donne
+       suffixe " j". Le groupe du nombre doit se terminer sur un chiffre, sinon
+       il avale l'espace qui sépare la valeur de son unité et « 1 490 € »
+       s'affiche « 1 490€ ». Les espaces admis à l'intérieur sont l'espace
+       normal, l'insécable et l'insécable fine, nos séparateurs de milliers. */
+    const m = valeur.match(/^(\D*)(\d[\d \u00a0\u202f]*\d|\d)(.*)$/);
     if (!m) return;
     const [, prefixe, brut, suffixe] = m;
     const cible = parseInt(brut.replace(/[^\d]/g, ""), 10);

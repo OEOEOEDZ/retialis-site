@@ -65,7 +65,13 @@ export function MarqueTrait({
   className?: string;
 }) {
   return (
-    <svg viewBox="0 0 120 120" width={taille} height={taille} className={className} aria-hidden>
+    <svg
+      viewBox="0 0 120 120"
+      width={taille}
+      height={taille}
+      className={`marque-trait ${className}`}
+      aria-hidden
+    >
       <Filet couleur={couleur} epaisseur={5} />
       <circle cx={NOEUD[0]} cy={NOEUD[1]} r="10" fill="var(--ambre)" stroke={couleur} strokeWidth="4" />
       {SOMMETS.map(([x, y], i) => (

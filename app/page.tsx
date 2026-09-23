@@ -75,7 +75,7 @@ export default function Accueil() {
               style={{ "--retard": "400ms" } as React.CSSProperties}
             >
               <span className="text-[3.4rem] font-extrabold leading-none tracking-tight text-[var(--primary)]">
-                {euro(OFFRE.prixDossier)}
+                <Compteur valeur={euro(OFFRE.prixDossier)} duree={1500} />
               </span>
               <span className="pb-1 text-[1.05rem] font-semibold text-[var(--ink-2)]">
                 HT, tout compris, livré en {OFFRE.delaiJours} jours
@@ -118,7 +118,9 @@ export default function Accueil() {
               </div>
 
               <div className="carte absolute -left-6 top-2 w-44 px-5 py-4 sm:-left-14">
-                <p className="text-[2.6rem] font-extrabold leading-none tracking-tight text-[var(--primary)]">80</p>
+                <p className="text-[2.6rem] font-extrabold leading-none tracking-tight text-[var(--primary)]">
+                  <Compteur valeur="80" duree={1100} />
+                </p>
                 <p className="mt-1.5 text-[14px] font-bold leading-tight">questions à remplir</p>
                 <p className="mt-1 text-[13px] text-[var(--ink-3)]">on s&apos;en occupe</p>
               </div>
@@ -127,7 +129,9 @@ export default function Accueil() {
                   carte est rognée par le bord de l'écran en dessous de 1500 px
                   et perd sa bordure et son ombre portée. */}
               <div className="carte absolute -right-6 bottom-2 w-44 px-5 py-4 sm:-right-5">
-                <p className="text-[2.6rem] font-extrabold leading-none tracking-tight text-[var(--ok)]">10 j</p>
+                <p className="text-[2.6rem] font-extrabold leading-none tracking-tight text-[var(--ok)]">
+                  <Compteur valeur="10 j" duree={1100} />
+                </p>
                 <p className="mt-1.5 text-[14px] font-bold leading-tight">et le dossier part</p>
                 <p className="mt-1 text-[13px] text-[var(--ink-3)]">délai contractuel</p>
               </div>
