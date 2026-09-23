@@ -1,0 +1,27 @@
+node_modules
+.next
+out
+.env*.local
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# donnees de prospection (contiennent des donnees de prospects)
+prospection/*.csv
+prospection/domaines.txt
+
+# DONNEES CLIENT CONFIDENTIELLES — ne doivent jamais partir sur un depot distant
+missions/
+questionnaires/*
+!questionnaires/exemple-*
+
+# secrets : couvre .env nu, pas seulement .env.local
+.env
+.env.*
+!.env.example
+
+# artefacts locaux d'outillage
+.playwright-mcp/
+*.png
+!public/**/*.png
+scratchpad/

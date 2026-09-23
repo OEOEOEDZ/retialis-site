@@ -1,0 +1,324 @@
+@import "tailwindcss";
+
+/*
+ * IDENTITÉ RETIALIS
+ *
+ * Registre : clair, franc, chaleureux. Le sujet est déjà anxiogène (une
+ * échéance, un contrat en jeu), donc la page doit rassurer au lieu d'en
+ * rajouter. Des aplats de couleur pleins plutôt que des dégradés sombres, une
+ * mascotte qui réagit, et une lecture possible en une minute.
+ *
+ * Quatre couleurs de marque, chacune avec un rôle fixe :
+ *   bleu    action et confiance
+ *   ambre   l'échéance, ce qui attire l'œil
+ *   corail  ce qui bloque
+ *   menthe  ce qui est réglé
+ *
+ * Les noms de variables sont stables : ne jamais en renommer un sans vérifier
+ * app/diagnostic/page.tsx, qui les consomme aussi.
+ */
+
+:root {
+  /* Identité assumée en clair, pas de variante sombre.
+     `--ink` sert à la fois d'encre et de fond (le pied de page, les blocs
+     pleins). Une palette sombre qui inverse ce jeton rend le pied de page et
+     le bouton final blancs sur blanc : mesuré à 1,06:1, donc illisible.
+     `color-scheme: light` force aussi les contrôles de formulaire et la barre
+     de défilement en clair chez un visiteur en thème sombre. */
+  color-scheme: light;
+
+  --ground: #f4f7ff;
+  --surface: #ffffff;
+  --surface-2: #e7eeff;
+  --border: #d3deff;
+  --border-fort: #9db0e8;
+
+  --ink: #10183a;
+  --ink-2: #47547d;
+  --ink-3: #55628a;     /* 5,9:1 sur blanc */
+
+  --primary: #1f58e8;   /* 5,4:1 avec du blanc dessus */
+  --primary-ink: #ffffff;
+  --primary-soft: #dfe9ff;
+
+  --signal: #c41f2e;    /* 4,9:1 sur blanc */
+  --signal-soft: #ffe4e6;
+  --warn: #b26b00;
+
+  --ok: #04724f;        /* texte et icônes : 5,9:1 sur blanc */
+  --ok-vif: #0bbd86;    /* aplats décoratifs, jamais de petit texte dessus */
+  --ok-soft: #d4f7ec;
+
+  /* Couleurs de blocs pleins */
+  --ambre: #ffb020;
+  --ambre-doux: #fff2d6;
+  --violet: #7c4dff;
+  --violet-doux: #ece5ff;
+  --menthe: #12c99b;
+
+  /* Conservés pour les pages non encore refondues */
+  --nuit: #10183a;
+  --nuit-2: #1a2454;
+  --nuit-3: #2f6bff;
+  --nuit-ink: #ffffff;
+  --nuit-ink-2: #b9c7f2;
+  --nuit-border: #2c3a73;
+  --vif: #7c4dff;
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-fort: var(--border-fort);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-primary: var(--primary);
+  --color-primary-ink: var(--primary-ink);
+  --color-primary-soft: var(--primary-soft);
+  --color-signal: var(--signal);
+  --color-signal-soft: var(--signal-soft);
+  --color-warn: var(--warn);
+  --color-ok: var(--ok);
+  --color-ok-vif: var(--ok-vif);
+  --color-ok-soft: var(--ok-soft);
+  --color-ambre: var(--ambre);
+  --color-ambre-doux: var(--ambre-doux);
+  --color-violet: var(--violet);
+  --color-violet-doux: var(--violet-doux);
+  --color-menthe: var(--menthe);
+  --color-nuit: var(--nuit);
+  --color-nuit-2: var(--nuit-2);
+  --color-nuit-ink: var(--nuit-ink);
+  --color-nuit-ink-2: var(--nuit-ink-2);
+  --color-nuit-border: var(--nuit-border);
+  --color-vif: var(--vif);
+  --font-sans: var(--police);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--police), ui-sans-serif, system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------ typographie */
+
+.t-hero {
+  font-size: clamp(2.7rem, 6vw, 5.6rem);
+  font-weight: 700;
+  letter-spacing: -0.038em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+.t-section {
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+.t-bloc { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.018em; line-height: 1.22; }
+h1, h2, h3 { text-wrap: balance; }
+p { max-width: 68ch; }
+.centre p, p.large { max-width: none; }
+
+/* Surlignage au feutre : attire l'œil sur une idée, pas sur un mot au hasard */
+.surligne {
+  background: linear-gradient(
+    transparent 68%,
+    color-mix(in srgb, var(--ambre) 85%, transparent) 68%,
+    color-mix(in srgb, var(--ambre) 85%, transparent) 96%,
+    transparent 96%
+  );
+  padding-inline: 0.06em;
+  /* Le trait suit chaque ligne plutôt que d'englober le bloc entier */
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* ------------------------------------------------------------- structure */
+
+.bande { width: 100%; }
+.wrap { width: 100%; max-width: 1400px; margin-inline: auto; padding-inline: 32px; }
+@media (max-width: 640px) { .wrap { padding-inline: 20px; } }
+.texte { max-width: 62ch; }
+.centre { margin-inline: auto; text-align: center; }
+.centre p { margin-inline: auto; }
+
+/* Blocs pleins : le rythme vient des aplats, pas des dégradés */
+.bloc-bleu { background: var(--primary); color: #fff; }
+.bloc-ambre { background: var(--ambre); color: #3a2600; }
+.bloc-violet { background: var(--violet); color: #fff; }
+.bloc-doux { background: var(--surface-2); }
+.bloc-blanc { background: var(--surface); }
+
+/* ---------------------------------------------------------------- actions */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 1.02rem;
+  line-height: 1.2;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s, background-color 0.2s, color 0.2s;
+}
+.btn:hover { transform: translateY(-3px); }
+.btn:active { transform: translateY(-1px); }
+
+.btn-action {
+  background: var(--primary);
+  color: var(--primary-ink);
+  box-shadow: 0 6px 0 0 color-mix(in srgb, var(--primary) 60%, black);
+}
+.btn-action:hover { box-shadow: 0 9px 0 0 color-mix(in srgb, var(--primary) 60%, black); }
+.btn-action:active { box-shadow: 0 4px 0 0 color-mix(in srgb, var(--primary) 60%, black); }
+
+.btn-ambre {
+  background: var(--ambre);
+  color: #3a2600;
+  box-shadow: 0 6px 0 0 color-mix(in srgb, var(--ambre) 60%, black);
+}
+.btn-ambre:hover { box-shadow: 0 9px 0 0 color-mix(in srgb, var(--ambre) 60%, black); }
+
+.btn-contour { border-color: var(--ink); color: var(--ink); background: transparent; }
+.btn-contour:hover { background: var(--ink); color: var(--surface); }
+
+.btn-blanc { background: #fff; color: var(--ink); box-shadow: 0 6px 0 0 rgba(0, 0, 0, 0.2); }
+
+/* Bouton secondaire posé sur un aplat de couleur.
+   Déclaré ici et non via des utilitaires : la règle .btn, chargée après
+   Tailwind, écrasait leur border-color et le bouton devenait invisible. */
+.btn-clair-contour { border-color: rgba(255, 255, 255, 0.85); color: #fff; background: transparent; }
+.btn-clair-contour:hover { background: #fff; color: var(--primary); border-color: #fff; }
+.btn-blanc:hover { box-shadow: 0 9px 0 0 rgba(0, 0, 0, 0.2); }
+
+a.lien { color: var(--primary); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+
+/* ----------------------------------------------------------------- blocs */
+
+/* Carte franche : trait net et ombre portée pleine, sans dégradé */
+.carte {
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 0 var(--ink);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s;
+}
+.carte-relief:hover { transform: translate(-3px, -3px); box-shadow: 10px 10px 0 0 var(--ink); }
+
+.carte-douce {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s, border-color 0.2s;
+}
+.carte-douce.carte-relief:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary);
+  box-shadow: 0 20px 40px -24px color-mix(in srgb, var(--primary) 70%, transparent);
+}
+
+.etat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.etat-vide { background: var(--signal-soft); color: var(--signal); }
+.etat-plein { background: var(--ok-soft); color: var(--ok); }
+.etat-cours { background: var(--primary-soft); color: var(--primary); }
+.etat-neutre { background: var(--surface-2); color: var(--ink-3); }
+
+/* ==========================================================================
+   MOUVEMENT
+   Tout est visible au repos. La classe `.anim` n'est posée sur <html> que si
+   le script tourne et si l'utilisateur n'a pas demandé de réduire les
+   animations. Si le JS échoue, rien n'est masqué.
+   ========================================================================== */
+
+@keyframes monter { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+.anim .entree {
+  opacity: 0;
+  animation: monter 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--retard, 0ms);
+}
+
+.anim [data-revele] { opacity: 0; transform: translateY(30px); }
+.anim [data-revele].vu {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--retard, 0ms);
+}
+
+/* Formes colorées qui flottent : ce qui donne vie à un fond clair */
+@keyframes flotte {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50%      { transform: translate3d(2.5%, -4%, 0) rotate(7deg); }
+}
+.forme {
+  position: absolute;
+  border-radius: 42% 58% 55% 45% / 52% 48% 52% 48%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.38;
+  filter: blur(56px);
+}
+.anim .forme { animation: flotte 16s ease-in-out infinite; }
+.forme-2 { animation-delay: -5s !important; }
+.forme-3 { animation-delay: -10s !important; }
+.surcouche { position: relative; z-index: 1; }
+
+/* Pastille qui bat, sur le bandeau d'échéance */
+@keyframes battement { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(0.5); opacity: 0.4; } }
+.anim .pastille { animation: battement 1.8s ease-in-out infinite; }
+
+@keyframes curseur { 0%, 45% { opacity: 1; } 46%, 100% { opacity: 0; } }
+.curseur { animation: curseur 1s steps(1) infinite; }
+
+.fleche { display: inline-block; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+.groupe:hover .fleche { transform: translateX(6px); }
+
+/* Mascotte : respiration et clignement */
+@keyframes respire { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+@keyframes cligne { 0%, 91%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.08); } }
+.anim .masc-corps { animation: respire 3.6s ease-in-out infinite; }
+.anim .masc-oeil { animation: cligne 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .anim .entree { opacity: 1 !important; animation: none !important; }
+  .anim [data-revele] { opacity: 1 !important; transform: none !important; }
+  .anim .forme, .anim .pastille, .anim .masc-corps, .anim .masc-oeil, .curseur { animation: none !important; }
+  .btn:hover, .carte-relief:hover { transform: none !important; }
+  * { transition-duration: 0.01ms !important; }
+}
+
+/* ------------------------------------------------------------------ divers */
+
+a:focus-visible, button:focus-visible, input:focus-visible,
+textarea:focus-visible, select:focus-visible, summary:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 3px;
+}
+::selection { background: var(--ambre); color: #3a2600; }
+
+@media print { .no-print { display: none !important; } }
