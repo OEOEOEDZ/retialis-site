@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HEBERGEUR, SITE } from "@/lib/site";
+import { HEBERGEUR, SITE, PRET_POUR_INDEXATION } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
@@ -28,12 +28,16 @@ export default function MentionsLegales() {
           Dernière mise à jour : {new Date().toLocaleDateString("fr-FR")}
         </p>
 
-        <div className="mt-8 rounded-sm border-l-2 border-[var(--signal)] bg-[var(--signal-soft)] p-5 text-sm leading-relaxed">
-          <strong>Note à l&apos;éditeur du site.</strong> Cette page est une trame. Les informations
-          d&apos;immatriculation doivent être renseignées et l&apos;ensemble relu avant toute mise en ligne
-          publique, les mentions légales sont une obligation prévue par la loi pour la confiance dans
-          l&apos;économie numérique. Cette note est à supprimer une fois la page complétée.
-        </div>
+        {/* L'encadré disparaît seul dès que SITE.siret et SITE.telephone sont
+            renseignés : plus besoin de penser à le supprimer à la main. */}
+        {!PRET_POUR_INDEXATION && (
+          <div className="mt-8 rounded-sm border-l-2 border-[var(--signal)] bg-[var(--signal-soft)] p-5 text-sm leading-relaxed">
+            <strong>Note à l&apos;éditeur du site.</strong> Cette page est une trame. Les informations
+            d&apos;immatriculation doivent être renseignées et l&apos;ensemble relu avant toute mise en ligne
+            publique, les mentions légales sont une obligation prévue par la loi pour la confiance dans
+            l&apos;économie numérique. Cette note est à supprimer une fois la page complétée.
+          </div>
+        )}
 
         <Bloc titre="Éditeur du site">
           <p>

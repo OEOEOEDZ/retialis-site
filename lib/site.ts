@@ -24,6 +24,20 @@ export const SITE = {
 } as const;
 
 /**
+ * ⚠️ INTERRUPTEUR DE VÉRITÉ, calculé et non saisi à la main.
+ *
+ * Vaut `true` seulement quand les mentions légales sont réellement
+ * renseignées. Tant qu'il vaut `false` :
+ *   - `app/robots.ts` interdit l'indexation du site en entier ;
+ *   - `app/mentions-legales/page.tsx` affiche l'encadré de note à l'éditeur.
+ *
+ * Il n'y a donc rien à penser à basculer : renseigner `siret` et `telephone`
+ * ci-dessus suffit à ouvrir l'indexation et à faire disparaître l'encadré.
+ */
+export const PRET_POUR_INDEXATION =
+  !SITE.siret.includes("compléter") && !SITE.telephone.startsWith("00 00");
+
+/**
  * Prise de rendez-vous.
  *
  * `url` reçoit le lien de la « plage de rendez-vous » créée dans Google
